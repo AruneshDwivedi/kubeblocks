@@ -447,14 +447,18 @@ func (r *BackupReconciler) prepareBackupRequest(
 	request.BackupPolicy = backupPolicy
 	request.BackupMethod = backupMethod
 
-	if !snapshotVolumes {
-		// if use volume snapshot, ignore backup repo
+	// For incremental backups, the backup repo is required regardless of
+	// snapshotVolumes, because prepare4Incremental needs it to validate
+	// the parent backup. Only skip the repo for full snapshot-only backups.
+	backupType := dpv1alpha1.BackupType(request.GetBackupType())
+	needBackupRepo := !snapshotVolumes || backupType == dpv1alpha1.BackupTypeIncremental
+	if needBackupRepo {
 		if err = HandleBackupRepo(request); err != nil {
 			return nil, err
 		}
 	}
 
-	switch dpv1alpha1.BackupType(request.GetBackupType()) {
+	switch backupType {
 	case dpv1alpha1.BackupTypeIncremental:
 		// requires backup repo info to validate parent backup
 		request, err = prepare4Incremental(request)

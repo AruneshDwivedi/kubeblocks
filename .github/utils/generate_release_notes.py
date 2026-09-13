@@ -22,9 +22,9 @@ from string import Template
 
 from github import Github
 
-RELEASE_ISSUE_RANGE = "^v(.*) Release Planning$"
-MAJOR_RELEASE_REGEX = "^([0-9]+\.[0-9]+)\.[0-9]+.*$"
-MILESTONE_REGEX = "https://github.com/apecloud/kubeblocks/milestone/([0-9]+)"
+RELEASE_ISSUE_RANGE = r"^v(.*) Release Planning$"
+MAJOR_RELEASE_REGEX = r"^([0-9]+\.[0-9]+)\.[0-9]+.*$"
+MILESTONE_REGEX = r"https://github.com/apecloud/kubeblocks/milestone/([0-9]+)"
 CHANGE_TYPES : list[str] = ["New Features", "Bug Fixes", "Miscellaneous"]
 
 
